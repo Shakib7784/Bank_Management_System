@@ -1,0 +1,15 @@
+
+#wrap{
+    min-height: 100vh;
+    margin-top:5%; 
+  }
+
+.loan_list
+{
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f7f7f7;
+}
+

@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView,RedirectView
 from .forms import UserRegistrationForm, UserAddressForm
 from django.contrib.auth.views import LoginView
+
 # Create your views here.
 
 User = get_user_model()

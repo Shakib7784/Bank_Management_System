@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Loan Details{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'CSS/loan_list.css' %}">
+{% endblock style %}
+
+{% block content %}
+
+<div class="container" id="wrap">
+    <div class="loan_list">
+        <h1 class="text-center fs-1 fw-bold">Loan Details</h1>
+        <hr>
+        <table class="table table-bordered table-info table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Loan Id</th>
+                <th scope="col">Loan Amount</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for loan in loans%}
+                <tr>
+                    <td class="fw-bold">{{loan.id}}</td>
+                    <td>{{loan.amount}}</td>
+                    <td>
+                        {% if loan.loan_approved %}
+                        <p class="text-success">Approved</p>
+                        {% else %}
+                        <p class="text-danger">Pending</p>    
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if loan.loan_approved %}
+                        <a class="btn btn-danger fw-bold" href="{% url 'payloan' loan.id %}">Pay</a>
+                        {% else %}
+                        <p class="text-danger fw-bold">Pending</p>    
+                        {% endif %}
+                    </td>
+                </tr>
+              {% endfor %}
+              
+            </tbody>
+          </table>
+          <div class="container pt-2 mt-2 ">
+            <h5 id="balance" class="text-center text-primary fw-bold" >Current Balance : {{user.BankAccount.balance}} $</h5>
+          </div>
+    </div>
+
+  <br><br>
+    {% for message in messages %}
+        {% if message.extra_tags == 'loan-pay-success' %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% elif message.extra_tags == 'loan-pay-error' %}
+            <div class="alert alert-danger">
+                {{ message }} 
+            </div>
+        {% endif %}
+    {% endfor %}
+
+
+</div>
+
+
+
+{% endblock content %}

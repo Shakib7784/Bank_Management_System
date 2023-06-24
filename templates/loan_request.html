@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block title %}Login{% endblock title %}
+{% block title %}Loan Request{% endblock title %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'CSS/login.css' %}">
+<link rel="stylesheet" href="{% static 'CSS/loan_request.css' %}">
 {% endblock style %}
 
 {% block content %}
+
 {% comment %} error handeling {% endcomment %}
 
 
@@ -22,19 +22,22 @@
 
 
 
-<div id="wrap" class="container">
-    <div class="login-form">
-        <h2 class="text-center mb-4">User Login</h2>
-        <form method="POST">
-            {% csrf_token %}
-            {% for hidden_field in form.hidden_fields %}
+
+
+<div id="wrap">
+  <div class="loan_request">
+    <h1 class="text-center fs-1 fw-bold">Send Request For Loan</h1>
+    <hr>
+    <form method="post">
+      {% csrf_token %}
+
+      {% for hidden_field in form.hidden_fields %}
              {{ hidden_field.errors }} {{ hidden_field }} 
-            {% endfor %}
-            
-            {% comment %} form is giving email as uername   {% endcomment %}
-            {% for field in form.visible_fields %}
-                <div class="form-group">
-                    <label for="{{field.id_for_label}}">{{field.label}}</label>
+      {% endfor %}
+
+      {% for field in form.visible_fields %}
+                <div class="form-group my-2">
+                    <label class="fw-bold fs-5 mb-1" for="{{field.id_for_label}}">{{field.label}}</label> 
                     <input class="form-control" name="{{ field.name }}" id="{{ field.id_for_label }}" type="{{ field.widget_type }}">
                    
                     {% if field.errors %} 
@@ -43,14 +46,12 @@
                             {% endfor %} 
                     {% endif %}
                 </div>
-            {% endfor %}
-          <br>
-          <button type="submit" class="btn btn-primary btn-block">Login</button>
-          
-        </form>
+        {% endfor %}
+      <button type="submit" class="btn btn-dark fw-bold mt-2">Request</button>
+    </form>
+    <br>
+    <h6>To view all of you loan details click here <a href="{% url 'loanlist' %}" class="btn btn-success fw-bold"> Loan Details</a></h6>
 
-    </div>
+  </div>
 </div>
-
-
-{% endblock content %}
+{% endblock %}
