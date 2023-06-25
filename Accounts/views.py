@@ -4,8 +4,10 @@ from django.contrib.auth import get_user_model,login,logout
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView,RedirectView
-from .forms import UserRegistrationForm, UserAddressForm
+from .forms import UserRegistrationForm, UserAddressForm, ProfileForm
 from django.contrib.auth.views import LoginView
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -35,18 +37,18 @@ class UserRegistrationView(TemplateView):
     
    
     def post(self,request, *args, **kwargs):
-        registration_form = UserRegistrationForm(self.request.POST)
+        registration_form = UserRegistrationForm(self.request.POST,request.FILES)
         address_form = UserAddressForm(self.request.POST)
         
-        if not registration_form.is_valid():
-            print("error from register form : ",registration_form.errors)
+        # if not registration_form.is_valid():
+        #     print("error from register form : ",registration_form.errors)
  
 
-        if not address_form.is_valid():
-            print("error from addrress form : ", address_form.errors)
+        # if not address_form.is_valid():
+        #     print("error from addrress form : ", address_form.errors)
             
-        print(registration_form.cleaned_data)
-        print(address_form.cleaned_data)
+        # print(registration_form.cleaned_data)
+        # print(address_form.cleaned_data)
 
 
         if registration_form.is_valid() and address_form.is_valid():
@@ -55,14 +57,14 @@ class UserRegistrationView(TemplateView):
             address = address_form.save(commit=False)
             address.user =user
             address.save()
-            messages.success(self.request,"Registration is successfull")
+            messages.success(self.request,"Registration is successfull",extra_tags="regsuccess")
             return HttpResponseRedirect(
                 reverse_lazy("login")
             )
             
         # if there is any form validation errors, the user is presented with the registration form again, including the error messages, so they can correct their input.
         
-        print("there is error")  
+        # print("there is error")  
         return self.render_to_response(
             self.get_context_data(
                 registration_form = registration_form,
@@ -128,3 +130,22 @@ def Profile(request):
         return render(request,"profile.html")
     else:
         return redirect("login")
+    
+    
+    
+
+
+class EditProfileView(LoginRequiredMixin,View):
+    def get(self, request):
+        user = request.user
+        form = ProfileForm(instance=user)
+        return render(request, 'edit_profile.html', {'form': form})
+
+    def post(self, request):
+        user = request.user
+        form = ProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(self.request,"Profile Edit is successfull",extra_tags="editsuccess")
+            return redirect('profile')
+        return render(request, 'edit_profile.html', {'form': form})

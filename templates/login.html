@@ -21,6 +21,17 @@
 {% endif %}
 
 
+{% comment %} message {% endcomment %}
+<div class="container py-5">
+
+    {% for message in messages %}
+            {% if message.extra_tags == 'regsuccess' %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+</div>
 
 <div id="wrap" class="container">
     <div class="login-form">

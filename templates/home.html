@@ -6,7 +6,39 @@
 {% block content %}
 
 
-<h1>Home</h1>
+{% comment %} <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <img src="/static/image/bank.jpg" alt="Your Picture" class="img-fluid">
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">Welcome!</h2>
+            <p class="card-text">This is the content of your card.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> {% endcomment %}
+
+  <div class="container-fluid mt-5 mb-0 pb-0">
+    <div class="row">
+      <div class="col-md-6 pr-2">
+        <img src="static/image/bank.jpg" alt="Your Picture" class="img-fluid h-100 w-100">
+      </div>
+      <div class="col-md-6 pl-2 ">
+        <div class="card h-100 ">
+          <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            <h2 class="card-title">Welcome!</h2>
+            
+            <a href="{% url 'reg' %}" class="btn btn-info fw-bold">Register</a>
+            <p class="card-text">Already have an accouont? <a href="{% url 'login' %}" class="btn btn-success btn-sm fw-bold">Login</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 {% endblock content %}

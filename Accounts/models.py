@@ -38,6 +38,9 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     username = None
     email = models.EmailField(unique=True,null=False,blank=False)
+    profile_picture = models.ImageField(upload_to="profile_pictures/", blank=True, null=True)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     objects = UserManager()

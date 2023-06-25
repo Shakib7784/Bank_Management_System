@@ -36,7 +36,7 @@
 <div id="wrap" class="container">
     <div class="registration-form">
         <h2 class="text-center mb-4">User Registration</h2>
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {% for hidden_field in registration_form.hidden_fields %}
              {{ hidden_field.errors }} {{ hidden_field }} 
@@ -155,11 +155,20 @@
                     {% endfor %} 
             {% endif %}
           </div>
+          <div class="form-group">
+            <label for="{{registration_form.profile_picture.id_for_label}}">{{registration_form.profile_picture.label}}</label>
+            {{registration_form.profile_picture}}
+            {% if registration_form.profile_picture.errors %} 
+                    {% for error in registration_form.profile_picture.errors %}
+                    <p class="text-danger fs-6  pb-2">{{ error }}</p>
+                    {% endfor %} 
+            {% endif %}
+          </div>
           <br>
           <button type="submit" class="btn btn-primary btn-block">Register</button>
           
         </form>
-
+        <p class="card-text mt-3">Already have an accouont? <a href="{% url 'login' %}" class="btn btn-success btn-sm fw-bold">Login</a></p>
       </div>
   </div>
 

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Edit Profile{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'CSS/editprofile.css' %}">
+{% endblock style %}
+
+{% block content %}
+
+
+<div id="wrap" class="container">
+    <div class="editprofile-form">
+        <h2 class="text-center mb-4">Edit Profile</h2>
+        <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+            <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name:</label>
+            {{ form.first_name }}
+            <div class="invalid-feedback">
+                {{ form.first_name.errors }}
+            </div>
+            </div>
+            <div class="mb-3">
+            <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name:</label>
+            {{ form.last_name }}
+            <div class="invalid-feedback">
+                {{ form.last_name.errors }}
+            </div>
+            </div>
+            <div class="mb-3">
+            <label for="{{ form.email.id_for_label }}" class="form-label">Email:</label>
+            {{ form.email }}
+            <div class="invalid-feedback">
+                {{ form.email.errors }}
+            </div>
+            </div>
+            <div class="mb-3">
+            <label for="{{ form.gender.id_for_label }}" class="form-label">Gender:</label>
+            {{ form.gender }}
+            <div class="invalid-feedback">
+                {{ form.gender.errors }}
+            </div>
+            </div>
+            <div class="mb-3">
+            <label for="{{ form.birth_date.id_for_label }}" class="form-label">Birth Date:</label>
+            {{ form.birth_date }}
+            <div class="invalid-feedback">
+                {{ form.birth_date.errors }}
+            </div>
+            </div>
+            <div class="mb-3">
+            <label for="{{ form.street.id_for_label }}" class="form-label">Street:</label>
+            {{ form.street }}
+            <div class="invalid-feedback">
+                {{ form.street.errors }}
+            </div>
+            </div>
+            <div class="mb-3">
+            <label for="{{ form.city.id_for_label }}" class="form-label">City:</label>
+            {{ form.city }}
+            <div class="invalid-feedback">
+                {{ form.city.errors }}
+            </div>
+            </div>
+            <div class="mb-3">
+            <label for="{{ form.postal_code.id_for_label }}" class="form-label">Postal Code:</label>
+            {{ form.postal_code }}
+            <div class="invalid-feedback">
+                {{ form.postal_code.errors }}
+            </div>
+            </div>
+            <div class="mb-3">
+            <label for="{{ form.country.id_for_label }}" class="form-label">Country:</label>
+            {{ form.country }}
+            <div class="invalid-feedback">
+                {{ form.country.errors }}
+            </div>
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.profile_picture.id_for_label }}" class="form-label">Profile Picture:</label>
+                {{ form.profile_picture }}
+                <div class="invalid-feedback">
+                {{ form.profile_picture.errors }}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+</div>
+  
+
+{% endblock content %}

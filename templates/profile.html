@@ -5,15 +5,99 @@
 
 {% block content %}
 
+<div class="container py-5">
 
-<h1>welcome {{user.email}}</h1>
+  {% for message in messages %}
+          {% if message.extra_tags == 'editsuccess' %}
+              <div class="alert alert-success">
+                  {{ message }}
+              </div>
+          {% endif %}
+      {% endfor %}
+</div>
 
 
-{% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-        {{ message }}
+<div class="container pb-5 mb-5">
+  <div class="row mt-5">
+    <div class="col-md-6 offset-md-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-circle" style="max-width: 150px;" alt="Profile Picture">
+          </div>
+
+          <h5 class="card-title">User Profile</h5>
+          <hr>
+
+          <div class="form-group row py-2">
+            <label class="col-sm-4 col-form-label">First Name:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" value="{{ user.first_name }}" readonly>
+            </div>
+          </div>
+
+          <div class="form-group row py-2">
+            <label class="col-sm-4 col-form-label">Last Name:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" value="{{ user.last_name }}" readonly>
+            </div>
+          </div>
+
+          <div class="form-group row py-2">
+            <label class="col-sm-4 col-form-label">Email:</label>
+            <div class="col-sm-8">
+              <input type="email" class="form-control" value="{{ user.email }}" readonly>
+            </div>
+          </div>
+
+          <div class="form-group row py-2">
+            <label class="col-sm-4 col-form-label">Gender:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" value="{{ user.BankAccount.gender }}" readonly>
+            </div>
+          </div>
+
+          <div class="form-group row py-2">
+            <label class="col-sm-4 col-form-label">Birth Date:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" value="{{ user.BankAccount.birth_date }}" readonly>
+            </div>
+          </div>
+
+          <div class="form-group row py-2">
+            <label class="col-sm-4 col-form-label">Account Type:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" value="{{ user.BankAccount.account_type }}" readonly>
+            </div>
+          </div>
+
+          <div class="form-group row py-2">
+            <label class="col-sm-4 col-form-label">Account Number:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" value="{{ user.BankAccount.account_no }}" readonly>
+            </div>
+          </div>
+
+          <div class="form-group row py-2">
+            <label class="col-sm-4 col-form-label">Balance:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" value="{{ user.BankAccount.balance }}" readonly>
+            </div>
+          </div>
+
+          <div class="form-group row py-2">
+            <label class="col-sm-4 col-form-label">Address:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" value="{{ user.address.street }}, {{ user.address.city }}, {{ user.address.postal_code }}, {{ user.address.country }}" readonly>
+            </div>
+          </div>
+
+          <div class="text-center mt-4">
+            <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+          </div>
+        </div>
+      </div>
     </div>
-{% endfor %}
-
-
+  </div>
+</div>
 {% endblock content %}
