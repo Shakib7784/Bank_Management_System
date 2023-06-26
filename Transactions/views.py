@@ -1,3 +1,5 @@
+from typing import Any, Dict
+from django.db.models.query import QuerySet
 from django.shortcuts import render,redirect, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,9 +10,8 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from .constants import TRANSACTION_TYPE_CHOICE
 from django.views.generic import ListView
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
-
+from datetime import datetime
+from django.db.models import Sum
 # Create your views here.
 
 
@@ -30,8 +31,8 @@ class DepositMoney(LoginRequiredMixin,View):
                 account.balance += deposite_amount
                 account.save()
                 form.save()
-            messages.success(request,f"Deposite of {deposite_amount} is successfull")
-            return redirect("profile")
+            messages.success(request,f"Deposite of {deposite_amount} is successfull",extra_tags="deposit")
+            return redirect("treport")
         return render(request,"deposit.html",{"form":form})
     
     
@@ -53,7 +54,7 @@ class WithdrawMoney(LoginRequiredMixin,View):
                 account.save()
                 form.save()
             messages.success(request,f"Withdraw of {withdraw_amount} is successfull")
-            return redirect("profile")
+            return redirect("treport")
         return render(request,"withdraw.html",{"form":form})
 
 
@@ -89,7 +90,7 @@ class LoanRequest(LoginRequiredMixin,View):
     
     
     
-
+#admin will approve
 class ApproveLoanView(LoginRequiredMixin, View):
     def get(self, request, transaction_id):
         try:
@@ -154,18 +155,28 @@ class LoanPay(LoginRequiredMixin,View):
 
 
 
-class ChangePassword(LoginRequiredMixin,View):
-    def get(self, request):
-        form = PasswordChangeForm(user=request.user)
-        context={"form":form}
-        return render(request,"changepass.html",context)
-    def post(selg,request):
-        form = PasswordChangeForm(user=request.user,data=request.POST)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request,form.user)
-            messages.success(request,"your password has been changed",extra_tags="passchange")
-            return redirect("profile")
-        else :
-            context={"form":form}
-            return render(request,"changepass.html",context)
+
+        
+        
+
+class TransactionReport(LoginRequiredMixin,ListView):
+    template_name="transaction_report.html"
+    model =Transaction
+    balance=0
+    def get_queryset(self) :
+        queryset = super().get_queryset().filter(account=self.request.user.BankAccount)
+        start_data_str = self.request.GET.get("start_date")
+        end_date_str = self.request.GET.get("end_date")
+        if start_data_str and end_date_str:
+            start_date = datetime.strptime(start_data_str, "%Y-%m-%d").date()
+            end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
+            queryset = queryset.filter(timestamp__date__gte=start_date,timestamp__date__lte=end_date)
+            self.balance = Transaction.objects.filter(timestamp__date__gte=start_date, timestamp__date__lte=end_date).aggregate(Sum("amount"))["amount__sum"]
+        else : 
+            self.balance = self.request.user.BankAccount.balance
+        return queryset.distinct()
+    
+    def get_context_data(self, **kwargs ):
+        context = super().get_context_data(**kwargs)
+        context.update({"account":self.request.user.BankAccount})
+        return context

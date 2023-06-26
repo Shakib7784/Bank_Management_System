@@ -8,6 +8,8 @@ from .forms import UserRegistrationForm, UserAddressForm, ProfileForm
 from django.contrib.auth.views import LoginView
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 # Create your views here.
 
@@ -149,3 +151,22 @@ class EditProfileView(LoginRequiredMixin,View):
             messages.success(self.request,"Profile Edit is successfull",extra_tags="editsuccess")
             return redirect('profile')
         return render(request, 'edit_profile.html', {'form': form})
+    
+    
+class ChangePassword(LoginRequiredMixin,View):
+    def get(self, request):
+        form = PasswordChangeForm(user=request.user)
+        context={"form":form}
+        return render(request,"changepass.html",context)
+    def post(selg,request):
+        form = PasswordChangeForm(user=request.user,data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request,form.user)
+            messages.success(request,"your password has been changed",extra_tags="passchange")
+            return redirect("profile")
+        else :
+            context={"form":form}
+            return render(request,"changepass.html",context)
+    
+

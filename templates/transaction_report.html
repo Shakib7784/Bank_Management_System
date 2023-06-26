@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Transaction{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'CSS/treport.css' %}">
+{% endblock style %}
+
+{% block content %}
+
+<div class="container py-5">
+  {% for message in messages %}
+    <div class="alert alert-success">
+      {{ message }}
+    </div>                     
+  {% endfor %}
+</div>
+
+<div id="wrap">
+  <div class="report">
+
+    <form method="GET" action="{% url 'treport' %}">
+        <div class="row">
+          <div class="col-md-6">
+            <label for="start_date" class="fw-bold">From:</label>
+            <input type="date" id="start_date" name="start_date" class="form-control" required>
+          </div>
+          <div class="col-md-6">
+            <label for="end_date" class="fw-bold">To:</label>
+            <input type="date" id="end_date" name="end_date" class="form-control" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3 fw-bold">Filter</button>
+      </form>
+      
+      
+        <br><br>
+       {% comment %} {% for trans in object_list%}
+        <div>{{trans.account}}</div>
+        <div>{{trans.amount}}</div>
+        <div>{{trans.blance_after_transaction}}</div>
+        <div>{{trans.transaction_type}}</div>
+        <div>Type: {{trans.get_transaction_type_display}}</div>
+        <br><br><hr>
+       {% endfor %} {% endcomment %}
+
+     
+       <hr>
+       <table class="table table-bordered table-light table-hover">
+           <thead class="table-dark">
+             <tr>
+               <th scope="col">Date</th>
+               <th scope="col">Transaction type</th>
+               <th scope="col">Amount</th>
+               <th scope="col">Balance After Transaction</th>
+             </tr>
+           </thead>
+           <tbody>
+             {% for trans in object_list %}
+               <tr>
+                   <td class="fw-bold">{{ trans.timestamp|date:"F d, Y h:i A" }}</td>
+                   <td class="fw-bold">
+                    <p 
+                    class="{% if trans.get_transaction_type_display == 'WITHDRAWAL' %}text-danger
+                    {% elif trans.get_transaction_type_display == 'DEPOSIT' %}text-info
+                    {% elif trans.get_transaction_type_display == 'LOAN' %}text-warning
+                    {% else %}text-success{% endif %}">
+                      {{ trans.transaction_type }}
+                    </p>
+                  </td>
+                  
+                    <td>{{trans.amount}}</td>
+                   <td>
+                    {{trans.blance_after_transaction}}
+                   </td>
+               </tr>
+             {% endfor %}
+             
+           </tbody>
+         </table>
+         <div class="container pt-2 mt-2 ">
+          <h5 id="balance" class="text-center text-primary fw-bold" >Current Balance : {{user.BankAccount.balance}} $</h5>
+        </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+

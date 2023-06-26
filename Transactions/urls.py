@@ -10,6 +10,6 @@ urlpatterns = [
     path('approve_loan/<int:transaction_id>/', views.ApproveLoanView.as_view(), name='approve_loan'),
     path("loanlist",views.LoanList.as_view(),name="loanlist"),
     path("payloan/<int:loan_id>/",views.LoanPay.as_view(),name="payloan"),
-    path("changepass/",views.ChangePassword.as_view(),name="changepass")
+    path("transaction_report/",views.TransactionReport.as_view(),name="treport"),
     
 ]
