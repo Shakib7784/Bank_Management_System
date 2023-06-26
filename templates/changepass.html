@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Change Password{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'CSS/changepass.css' %}">
+{% endblock style %}
+
+{% block content %}
+{% comment %} error handeling {% endcomment %}
+
+
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+    <div class="bg-danger border border-danger rounded  px-4 py-3 my-3 container ">
+        <p class="fw-bolder text-white">Error!</p>
+        <p class="fw-bolder text-white">{{ error|escape }}</p>
+    </div>
+{% endfor %}
+{% endif %}
+
+
+
+
+<div id="wrap" class="container">
+    <div class="pass-form">
+        <h2 class="text-center mb-4">change Your Password</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {% for hidden_field in form.hidden_fields %}
+             {{ hidden_field.errors }} {{ hidden_field }} 
+            {% endfor %}
+            
+            {% comment %} form is giving email as uername   {% endcomment %}
+            {% for field in form.visible_fields %}
+                <div class="form-group">
+                    <label class="fw-bold" for="{{field.id_for_label}}">{{field.label}}</label>
+                    <input class="form-control" name="{{ field.name }}" id="{{ field.id_for_label }}" type="{{ field.widget_type }}">
+                   
+                    {% if field.errors %} 
+                            {% for error in field.errors %}
+                            <p class="text-danger fs-6  pb-2">{{ error }}</p>
+                            {% endfor %} 
+                    {% endif %}
+                </div>
+            {% endfor %}
+          <br>
+          <button type="submit" class="btn btn-dark btn-block fw-bold">Change</button>
+          
+        </form>
+
+    </div>
+</div>
+
+
+{% endblock content %}

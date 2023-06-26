@@ -8,6 +8,8 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from .constants import TRANSACTION_TYPE_CHOICE
 from django.views.generic import ListView
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 # Create your views here.
 
@@ -81,39 +83,12 @@ class LoanRequest(LoginRequiredMixin,View):
                     loan_approved=False
                 )
                 loan_transaction.save()
-            messages.success(request,f"Loan request of {loan_amount} is send successfully")
-            return redirect("profile")
+            messages.success(request,f"Loan request of {loan_amount} is send successfully",extra_tags="loanreq")
+            return redirect("loanlist")
         return render(request,"loan_request.html",{"form":form})
     
     
     
-    
-
-
-
-# def approve_loan(request, transaction_id):
-#     try:
-#         transaction = Transaction.objects.get(id=transaction_id)
-#         amount = transaction.amount
-#         # Retrieve the associated user's bank account
-#         account = transaction.account
-#         if account:
-#             # Update the user's balance
-#             account.balance += amount
-#             transaction.blance_after_transaction = account.balance
-#             account.save()
-#             transaction.loan_approved = True
-#             transaction.save()
-#             messages.success(request, 'Loan request approved successfully.')
-#         else:
-#             messages.error(request, 'Associated bank account not found.')
-            
-#     except Transaction.DoesNotExist:
-#         messages.error(request, 'Loan request not found.')
-#     previous_url = request.META.get('HTTP_REFERER')
-#     return redirect(previous_url)  # Redirect back to the previous page 
-
-
 
 class ApproveLoanView(LoginRequiredMixin, View):
     def get(self, request, transaction_id):
@@ -176,3 +151,21 @@ class LoanPay(LoginRequiredMixin,View):
         return redirect(previous_url)
 
 
+
+
+
+class ChangePassword(LoginRequiredMixin,View):
+    def get(self, request):
+        form = PasswordChangeForm(user=request.user)
+        context={"form":form}
+        return render(request,"changepass.html",context)
+    def post(selg,request):
+        form = PasswordChangeForm(user=request.user,data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request,form.user)
+            messages.success(request,"your password has been changed",extra_tags="passchange")
+            return redirect("profile")
+        else :
+            context={"form":form}
+            return render(request,"changepass.html",context)

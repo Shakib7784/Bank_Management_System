@@ -8,7 +8,7 @@
 <div class="container py-5">
 
   {% for message in messages %}
-          {% if message.extra_tags == 'editsuccess' %}
+          {% if message.extra_tags == 'editsuccess' or message.extra_tags == 'passchange' %}
               <div class="alert alert-success">
                   {{ message }}
               </div>
@@ -92,8 +92,9 @@
             </div>
           </div>
 
-          <div class="text-center mt-4">
-            <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+          <div class="d-flex justify-content-between mt-4">
+            <a href="{% url 'edit_profile' %}" class="btn btn-primary fw-bold">Edit Profile</a>
+            <a href="{% url 'changepass' %}" class="btn btn-success fw-bold">Change Password</a>
           </div>
         </div>
       </div>

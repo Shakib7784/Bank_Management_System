@@ -9,6 +9,21 @@
 
 {% block content %}
 
+<div class="container py-5">
+
+  {% for message in messages %}
+          {% if message.extra_tags == "loanreq" %}
+              <div class="alert alert-success">
+                  {{ message }}
+              </div>
+          {% endif %}
+      {% endfor %}
+</div>
+
+
+
+
+
 <div class="container" id="wrap">
     <div class="loan_list">
         <h1 class="text-center fs-1 fw-bold">Loan Details</h1>
